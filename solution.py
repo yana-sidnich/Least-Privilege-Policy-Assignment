@@ -1,11 +1,10 @@
 import json
-import sys
 import os
 import argparse
 from pathlib import Path
 
 
-#given util class
+# given util class
 class ActionsConverter:
     # Example of method calls and their permissions. out of 4 actions found in the code, 3 actions related to the dynamoDB_client needed to be added.
     actions_to_permissions = {
@@ -52,41 +51,45 @@ def get_permissions(actions: list) -> list:
     return permissions
 
 
-# def intersect(l1 : list, l2 : list):
-#     print(list(set(l1).intersection(l2)))
-#     return list(set(l1).intersection(l2))
+# This function allows to extract only common varaibles in two lists.
+# intersect([1,2,3], [2,4,3]) -> [2,3]
+def intersect(l1: list, l2: list):
+    print(list(set(l1).intersection(l2)))
+    return list(set(l1).intersection(l2))
 
 
-def update_statement(statement: dict, permissions: list):
+# A wrapper to the logic of overriding a single statement permissions (== actions possible)
+def update_single_statement(statement: dict, permissions: list):
     statement['Action'] = permissions
 
 
-"""
-given the lambda's code and current policy we:
-    1. find all the action inside the function's code.
-    2. find the needed permissions for those actions.
-    3. edit the given policy data, remove uneeded permissions and add the new ones. 
-"""
+# Update the given Statement of the policy, the function the different ways to read the statement,
+# which beahave differntly if there is a single or multiple statements in the json.
+def update_all_statements(statement: dict, permissions: list):
+    if isinstance(statement, list):
+        for single_statement in statement:
+            update_single_statement(single_statement, permissions)
+
+    else:  # in case there is a single statement - it returns as dict instead of list.
+        update_single_statement(single_statement, permissions)
 
 
-def generate_least_privilage(lambda_code: str, lambda_policies: str) -> dict:
+# Given the lambda's code and current policy we:
+#     1. find all the action inside the function's code.
+#     2. find the needed permissions for those actions.
+#     3. edit the given policy data, remove uneeded permissions and add the new ones.
+def generate_least_privilage(lambda_code: str, lambda_policy: str) -> dict:
     found_actions = ActionsConverter().find_actions(lambda_code)
     needed_permissions = get_permissions(found_actions)
-    policy_json = json.loads(lambda_policies)
+    update_all_statements(
+        statement=lambda_policy['PolicyDocument']['Statement'],
+        permissions=needed_permissions)
 
-    if isinstance(policy_json['PolicyDocument']['Statement'], list):
-        for statement in policy_json['PolicyDocument']['Statement']:
-            update_statement(statement, needed_permissions)
-
-    else:  # dict
-        update_statement(policy_json['PolicyDocument']['Statement'],
-                         needed_permissions)
-
-    return policy_json
+    return lambda_policy
 
 
-#export the least privilaged policy to JSON file
-def export_json_to_file(policy_data, file_name):
+# Export the least privilaged policy to JSON file
+def export_json_to_file(policy_data: dict, file_name: str):
     least_privilaged_policy_json = json.dumps(policy_data, indent=4)
     with open(file_name, 'w') as outfile:
         outfile.write(least_privilaged_policy_json)
@@ -99,11 +102,13 @@ def main():
             and os.path.exists(parsed_args.lambda_policy)):
         print("please check the provided paths, one of them doesn't exists")
         return
-
+    # get lambda code and json from files.
     lambda_code = Path(parsed_args.lambda_code).read_text()
     lambda_policy = Path(parsed_args.lambda_policy).read_text()
+    policy_json = json.loads(lambda_policy)
+
     least_privilaged_policy = generate_least_privilage(lambda_code,
-                                                       lambda_policy)
+                                                       policy_json)
     export_json_to_file(least_privilaged_policy,
                         'least_privilaged_policy.json')
 
