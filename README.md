@@ -81,6 +81,8 @@ Once both parts were investigated and done, we are left with the task of changin
 (One more honest explanation, I realized I assumed that each role can have only one policy, and I guess that "in the real world" it can have many policies. the change to the code is not that big, the functionality is there, I just need to loop on all the policies of the role and apply the logic to each on of them. In addition we can change the logic a bit, if we know that the actions we need are included in the given policy we can use the intersection function to filter all the unneeded actions from each statement. Right now all Actions in each statement are changed to the same needed actions/permissions ). Finally our function returns the new policy as dict (basically a JSON), and the main function exports it to a local JSON file.
 Of course additional documentation is available inside the code itself.
 
+**"I want to point that in the solution_extra_point.py script, the returned policy contains the response metadata that you get back when using iam_client.get_role_policy. If not needet it can be removed easly."**
+
 There are two seperate scripts:
 
 1. The first - solution.py - assumes the input is loaded from local files. The file paths are sent on the command line execution.
