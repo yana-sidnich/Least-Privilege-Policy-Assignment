@@ -90,7 +90,7 @@ When I started this assignment I had more of a theoretical knowledge about lambd
 3. Learning more about lambda function: how to create them, whats their purpose, how they work, etc.
 4. further strengthen my googeling skills :)
 
-I want to thank you for this opportunity : )
+I want to thank you for this opportunity :)
 I hope to hear from you if you think I'm a fit this role, either way I would love to get a feedback from you about my submission :)
 
 ## Dependencies
