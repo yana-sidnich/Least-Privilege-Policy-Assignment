@@ -5,6 +5,11 @@ This repository contains my solution to given home assignment. There are two .py
 1.  solution.py - containing the solution not including the bonus part.
 2.  solution_extra_points.py - containing the solution including the bonus part.
 
+In addition the following files are included:
+
+1. sample_policy.json - the policy of the given lambda function, can be used for testing.
+2. lambda_function.py - contains the code of the given lambda function, can be used for testing the solution.py script.
+
 # My Work Process
 
 ## First Step
