@@ -83,10 +83,15 @@ There are two seperate scripts:
 
 ## Summery
 
-First of all thank you for this opportunity : )
-When I started this assignment I had more of a theoretical knowledge about lambda function and some other AWS services like S3 bucket, but I needed to gain more hands on experience working with tools like AWS CLI, AWS SDK (boto3 in this case), and using the different AWS services inside my code projects. This assignment made me "get my hands dirty" and starts gaining experience with this tools.
+When I started this assignment I had more of a theoretical knowledge about lambda function and some other AWS services like S3 bucket, but I needed to gain more hands on experience working with tools like AWS CLI, AWS SDK (boto3 in this case), and using the different AWS services inside my code projects. This assignment made me "get my hands dirty" and starts gaining experience with this tools. My takeouts from this assignment are:
 
-I hope to hear from you if you see me fitted for this role, either way I would love to get a feedback from you about my submission :)
+1. Working with AWS CLI and AWS SDK for pyhton, boto3.
+2. Understanding the relations between execution roles and function policy.
+3. Learning more about lambda function: how to create them, whats their purpose, how they work, etc.
+4. further strengthen my googeling skills :)
+
+I want to thank you for this opportunity : )
+I hope to hear from you if you think I'm a fit this role, either way I would love to get a feedback from you about my submission :)
 
 ## Dependencies
 
