@@ -15,7 +15,7 @@ My first step was getting familiar with the AWS CLI, I followed the installation
 ## Second Step
 
 My next step was starting to extract as much information I could about the lambda function. I configured the credentials with the one you provided me with so I can start working with the CLI. The first step was getting the function's code so I can inspect it. In order to do that I searched the right command inside the AWS CLI commands reference, and I found the get-function command. Running this command resulted with the following output:
-![contrast1](https://photos.app.goo.gl/FQsFGr4xkphYXhk19)
+![contrast1](/images/contrast1.png)
 
 we can see the Code section in the output which contains the location of the files. From looking at the URL I assumed the code is located inside a S3 bucket. I pasted the URL and downloaded the file. My next step was looking at the code and as guided, try to look for all the actions inside the code. We can see that using the AWS SDK boto3 we opened 2 clients, one for the S3 services, and one for the dynamoDB services. Next lets look for all the function that are triggered on both of this clients:
 
@@ -41,9 +41,9 @@ To my understanding each function is an action that requires a permission, so my
 
 next step was looking into our function policy. From what I figured out the policy is strongly connected to the execution role of the function, the function's policies are the policies of the function's execution role. The role name can be seen in the first picture, what we need is the last part of the string, after the '/' character: **"sample_s3_dynamodb-role-ay0f0nbb"**.
 using this name and the following command we got the following output:
-![contrast 2 ](https://photos.app.goo.gl/re6beWoS1Lj8LHeS9)
+![contrast 2 ](/images/contrast2.png)
 We can see that the function's role has one policy named **"policy_sample"**. Now using the role's and policy's names we can get more information about the policy using the following command (The output is partial, the full one can be seen in the sample_policy.txt file):
-![contrast3](https://photos.app.goo.gl/Z7j9qLDWQmoGzADC6)
+![contrast3](/images/contrast3.png)
 We can see there are a lot more policies granted to our lambda function, more that needed, and we need to fix that.
 (Again, I want to be honest, it was very weird to me that there are all of this actions granted for our function, and even more it bothered be that the permission I stated that we need to have are not in this list, I hope I'm on the right track here....).
 
