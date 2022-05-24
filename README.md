@@ -15,7 +15,7 @@ My first step was getting familiar with the AWS CLI, I followed the installation
 ## Second Step
 
 My next step was starting to extract as much information I could about the lambda function. I configured the credentials with the one you provided me with so I can start working with the CLI. The first step was getting the function's code so I can inspect it. In order to do that I searched the right command inside the AWS CLI commands reference, and I found the get-function command. Running this command resulted with the following output:
-![contrast1](/images/contrast1.png)
+![contrast1](https://photos.app.goo.gl/FQsFGr4xkphYXhk19)
 
 we can see the Code section in the output which contains the location of the files. From looking at the URL I assumed the code is located inside a S3 bucket. I pasted the URL and downloaded the file. My next step was looking at the code and as guided, try to look for all the actions inside the code. We can see that using the AWS SDK boto3 we opened 2 clients, one for the S3 services, and one for the dynamoDB services. Next lets look for all the function that are triggered on both of this clients:
 
@@ -41,9 +41,9 @@ To my understanding each function is an action that requires a permission, so my
 
 next step was looking into our function policy. From what I figured out the policy is strongly connected to the execution role of the function, the function's policies are the policies of the function's execution role. The role name can be seen in the first picture, what we need is the last part of the string, after the '/' character: **"sample_s3_dynamodb-role-ay0f0nbb"**.
 using this name and the following command we got the following output:
-![contrast 2 ](/images/contrast2.png)
+![contrast 2 ](https://photos.app.goo.gl/re6beWoS1Lj8LHeS9)
 We can see that the function's role has one policy named **"policy_sample"**. Now using the role's and policy's names we can get more information about the policy using the following command (The output is partial, the full one can be seen in the sample_policy.txt file):
-![contrast3](/images/contrast3.png)
+![contrast3](https://photos.app.goo.gl/Z7j9qLDWQmoGzADC6)
 We can see there are a lot more policies granted to our lambda function, more that needed, and we need to fix that.
 (Again, I want to be honest, it was very weird to me that there are all of this actions granted for our function, and even more it bothered be that the permission I stated that we need to have are not in this list, I hope I'm on the right track here....).
 
@@ -80,6 +80,13 @@ There are two seperate scripts:
 
 1. The first - solution.py - assumes the input is loaded from local files. The file paths are sent on the command line execution.
 2. The second - solution_extra_points.py, receives the lambda name as an argument, and it extracts both lambda code and lambda policy, using the boto3 - aws sdk. This script reuses the functions and logic inside the original solution script.
+
+## Summery
+
+First of all thank you for this opportunity : )
+When I started this assignment I had more of a theoretical knowledge about lambda function and some other AWS services like S3 bucket, but I needed to gain more hands on experience working with tools like AWS CLI, AWS SDK (boto3 in this case), and using the different AWS services inside my code projects. This assignment made me "get my hands dirty" and starts gaining experience with this tools.
+
+I hope to hear from you if you see me fitted for this role, either way I would love to get a feedback from you about my submission :)
 
 ## Dependencies
 

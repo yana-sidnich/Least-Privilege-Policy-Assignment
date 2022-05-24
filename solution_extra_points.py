@@ -45,7 +45,7 @@ def download_function(url: str):
 
 
 # Get the role name out of the function data
-def extract_role_name(function_data: dict):
+def get_role_name(function_data: dict):
     return function_data['Configuration']['Role'].split('/')[-1]
 
 
@@ -75,7 +75,7 @@ def main():
 
     function_data = get_lambda_data(lambda_name=parsed_args.lambda_name)
     lambda_code = download_function(url=function_data['Code']['Location'])
-    policy_data = get_first_policy(role_name=extract_role_name(function_data))
+    policy_data = get_first_policy(role_name=get_role_name(function_data))
     least_privileged_policy = generate_least_privilage(lambda_code,
                                                        policy_data)
     export_json_to_file(least_privileged_policy,

@@ -41,6 +41,13 @@ def create_arg_parser() -> argparse.ArgumentParser:
     return parser
 
 
+# This function allows to extract only common varaibles in two lists.
+# intersect([1,2,3], [2,4,3]) -> [2,3]
+# This function was not used in this solution. as I mentioned in the REANME.md file, as far as i could see the policy of  the given function didn't contain the needed permmisions, In this case intersect can't be used.
+def intersect(l1: list, l2: list):
+    return list(set(l1).intersection(l2))
+
+
 #returns a list containing the needed permissions for the action in the given actions list
 def get_permissions(actions: list) -> list:
     action_converter = ActionsConverter()
@@ -49,13 +56,6 @@ def get_permissions(actions: list) -> list:
         premmision = action_converter.actions_to_permissions.get(action)
         permissions.extend(premmision)
     return permissions
-
-
-# This function allows to extract only common varaibles in two lists.
-# intersect([1,2,3], [2,4,3]) -> [2,3]
-def intersect(l1: list, l2: list):
-    print(list(set(l1).intersection(l2)))
-    return list(set(l1).intersection(l2))
 
 
 # A wrapper to the logic of overriding a single statement permissions (== actions possible)
@@ -74,6 +74,13 @@ def update_all_statements(statement: dict, permissions: list):
         update_single_statement(single_statement, permissions)
 
 
+# Export the least privilaged policy to JSON file
+def export_json_to_file(policy_data: dict, file_name: str):
+    least_privilaged_policy_json = json.dumps(policy_data, indent=4)
+    with open(file_name, 'w') as outfile:
+        outfile.write(least_privilaged_policy_json)
+
+
 # Given the lambda's code and current policy we:
 #     1. find all the action inside the function's code.
 #     2. find the needed permissions for those actions.
@@ -88,18 +95,11 @@ def generate_least_privilage(lambda_code: str, lambda_policy: str) -> dict:
     return lambda_policy
 
 
-# Export the least privilaged policy to JSON file
-def export_json_to_file(policy_data: dict, file_name: str):
-    least_privilaged_policy_json = json.dumps(policy_data, indent=4)
-    with open(file_name, 'w') as outfile:
-        outfile.write(least_privilaged_policy_json)
-
-
 def main():
     arg_parser = create_arg_parser()
     parsed_args = arg_parser.parse_args()
-    if not (os.path.exists(parsed_args.lambda_code)
-            and os.path.exists(parsed_args.lambda_policy)):
+    if not os.path.exists(parsed_args.lambda_code) or not os.path.exists(
+            parsed_args.lambda_policy):
         print("please check the provided paths, one of them doesn't exists")
         return
     # get lambda code and json from files.
